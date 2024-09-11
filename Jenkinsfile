@@ -42,14 +42,8 @@ pipeline {
                     withCredentials([aws(credentialsId: 'kanakaws', region: AWS_REGION)]) {
                         // Run Terraform inside the Docker container
                         sh """
-                        docker run --rm -v \$(pwd):/workspace -w /workspace my-docker-registry/${imageName}:${imageTag} /bin/bash -c "
+                        docker run --rm -v \$(pwd):/workspace -w /workspace my-docker-registry/${imageName}:${imageTag} /bin/bash -c '
                             terraform init &&
                             terraform apply -auto-approve
-                        "
-                        """
-                    }
-                }
-            }
-        }
-    }
-}
+                        '
+                        ""
