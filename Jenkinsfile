@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'my-terraform-docker-image:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/local/bin/docker' // Ensure Docker CLI is available and Docker socket is mounted
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/local/bin/docker' // Mount Docker socket and CLI
         }
     }
 
