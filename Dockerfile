@@ -12,6 +12,7 @@ RUN apt-get update && \
     gnupg \
     lsb-release && \
     curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - && \
+    apt-get update && apt-get install -y software-properties-common curl unzip gnupg lsb-release
     apt-add-repository "deb https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
     apt-get update && \
     apt-get install -y terraform && \
