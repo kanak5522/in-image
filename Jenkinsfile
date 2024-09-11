@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'my-terraform-docker-image:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Allows Docker commands within Docker
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/local/bin/docker' // Ensure Docker CLI is available and Docker socket is mounted
         }
     }
 
@@ -14,11 +14,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
+                    // Define Docker image name and tag
                     def imageName = 'my-terraform-docker-image'
                     def imageTag = 'latest'
 
-                    // Use Docker commands within the Docker agent
+                    // Build Docker image inside Docker container
                     sh "docker build -t ${imageName}:${imageTag} ."
 
                     // Optionally push to a Docker registry
@@ -34,7 +34,11 @@ pipeline {
         stage('Deploy with Terraform') {
             steps {
                 script {
-                    // Define your AWS credentials
+                    // Define Docker image name and tag for deployment
+                    def imageName = 'my-terraform-docker-image'
+                    def imageTag = 'latest'
+
+                    // Define AWS credentials
                     withCredentials([aws(credentialsId: 'kanakaws', region: AWS_REGION)]) {
                         // Run Terraform inside the Docker container
                         sh """
