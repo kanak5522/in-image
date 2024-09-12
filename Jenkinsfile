@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'my-terraform-docker-image'
+            args '--privileged'
+        }
+    }
     stages {
         stage('Build Docker Image') {
             steps {
@@ -12,15 +17,13 @@ pipeline {
         stage('Deploy with Docker') {
             steps {
                 script {
-                    docker.image('my-terraform-docker-image').inside('--privileged') {
-                        // Checkout code
-                        checkout scm
+                    // Checkout code
+                    checkout scm
 
-                        // Run Terraform commands
-                        sh 'terraform init'
-                        sh 'terraform plan'
-                        sh 'terraform apply -auto-approve'
-                    }
+                    // Run Terraform commands
+                    sh 'terraform init'
+                    sh 'terraform plan'
+                    sh 'terraform apply -auto-approve'
                 }
             }
         }
